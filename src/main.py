@@ -186,6 +186,9 @@ class Game(object):
 			o = persistent.load()
 		except IOError:
 			self.fail('Soubor ' + filename + ' se nepodarilo otevrit.')
+		except:
+			print "File not input!!"
+			return 
 		self.world = o.world
 		self.species = o.species
 		self.iterations = o.iterations
