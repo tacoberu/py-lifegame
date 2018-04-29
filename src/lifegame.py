@@ -28,7 +28,7 @@ class XmlStorage(object):
 		self.filename = filename
 
 
-	def store(self, aworld, aiterations, aspecies):
+	def store(self, aworld, aspecies, aiterations):
 		"Ulozeni do souboru."
 		life = Element("life")
 		world = SubElement(life, "world")
