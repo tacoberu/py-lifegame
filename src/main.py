@@ -13,6 +13,7 @@ import pygame
 import lifegame
 import Tkinter
 import tkFileDialog
+import tkMessageBox
 
 
 width = 500
@@ -181,14 +182,14 @@ class Game(object):
 
 	def onFileLoad(self):
 		filename = tkFileDialog.askopenfilename(filetypes=[('XML Files','.xml'), ('All Files','*')])
-		persistent = lifegame.XmlStorage(filename)
+		if not filename:
+			return
 		try:
+			persistent = lifegame.XmlStorage(filename)
 			o = persistent.load()
-		except IOError:
-			self.fail('Soubor ' + filename + ' se nepodarilo otevrit.')
 		except:
-			print "File not input!!"
-			return 
+			self.fail('File `' + str(filename) + '\' cannot be opened.')
+			return
 		self.world = o.world
 		self.species = o.species
 		self.iterations = o.iterations
@@ -200,11 +201,14 @@ class Game(object):
 
 	def onFileStore(self):
 		filename = tkFileDialog.asksaveasfilename(defaultextension='.xml', filetypes=[('XML Files','.xml')])
-		persistent = lifegame.XmlStorage(filename)
+		if not filename:
+			return
 		try:
+			persistent = lifegame.XmlStorage(filename)
 			o = persistent.store(self.world, self.species, self.iterations)
-		except IOError:
-			self.fail('Soubor ' + filename + ' se nepodarilo ulozit.')
+		except:
+			self.fail('File `' + str(filename) + '\' cannot be saved.')
+			return
 		self.controls['run'].disable()
 
 
@@ -240,6 +244,10 @@ class Game(object):
 		"Vykresli plochu."
 		for each in self.controls:
 			self.controls[each].draw(self.screen)
+
+
+	def fail(self, msg, title="Error"):
+		tkMessageBox.showerror(title, msg)
 
 
 
